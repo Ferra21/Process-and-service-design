@@ -1,0 +1,184 @@
+openapi: 3.0.0
+info:
+  title: DigitalPharma external-services
+  description: "Add a description"
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/
+  description: Local Server
+tags:
+- name: pharmacy
+  description: APIs of the Digital-pharma pharmacy third party for requesting and managing
+    **pharmacy**
+paths:
+  /pharmacy/getListOfPharmacies:
+    get:
+      tags:
+      - pharmacy
+      summary: Get list of pharmacies
+      description: This API allows to get list of pharmacies
+      operationId: getListOfPharmacies
+      responses:
+        "200":
+          description: List of pharmacies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPharmacy'
+        "404":
+          description: Pharmacies not found
+      x-swagger-router-controller: Pharmacy
+  /pharmacy/getAvailability:
+    post:
+      tags:
+        - pharmacy
+      summary: Get the availability of a drug
+      description: This API allows to submit a request for availability of drugs
+      operationId: getAvailability
+      requestBody:
+        description: Details of the pharmacy, the drug and the quantity of it
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/drugRequest'
+        required: true
+      responses:
+        "200":
+          description: If the drug is avaliabile (true) or not (false)
+          content:
+            application/json:
+              schema:
+                properties:
+                  res:
+                    type: boolean
+        "400":
+          description: "Bad request"
+      x-swagger-router-controller: Pharmacy
+  /pharmacy/reserveDrugs:
+    post:
+      tags:
+        - pharmacy
+      summary: Reserve drugs
+      description: This API allows to submit a request for reserve drugs
+      operationId: reserveDrugs
+      requestBody:
+        description: Details of the pharmacy, the drug and the quantity of it
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/drugRequest'
+        required: true
+      responses:
+        "200":
+          description: If the drug is avaliabile, reserve drugs
+          content:
+            application/json:
+              schema:
+                properties:
+                  res:
+                    type: string
+                  price:
+                    type: number
+        "400":
+          description: "Bad request"
+      x-swagger-router-controller: Pharmacy
+  /pharmacy/orderDrugs:
+    post:
+      tags:
+        - pharmacy
+      summary: Order drugs
+      description: This API allows to submit a request for order drugs
+      operationId: orderDrugs
+      requestBody:
+        description: Details of the pharmacy, the drug and the quantity of it
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/drugRequest'
+        required: true
+      responses:
+        "200":
+          description: Order Drugs, price and daysForRestock
+          content:
+            application/json:
+              schema:
+                properties:
+                  res:
+                    type: string
+                  price:
+                    type: number
+        "400":
+          description: "Bad request"
+      x-swagger-router-controller: Pharmacy
+  /pharmacy/getTimeAvailability:
+    post:
+      tags:
+        - pharmacy
+      summary: Get time availability for withdraw
+      description: This API allows to submit a request for get time availability of drugs
+      operationId: getTimeAvailability
+      requestBody:
+        description: Details of the pharmacy, the drug and the availability of it
+        content:
+          application/json:
+            schema:
+              properties:
+                pharmacyId:
+                  type: integer
+                drugId:
+                  type: integer
+                available:
+                  type: boolean
+        required: true
+      responses:
+        "200":
+          description: opening hours and daysForRestock if needed
+          content:
+            application/json:
+              schema:
+                properties:
+                  openingHours:
+                    type: string
+                  daysForRestock:
+                    type: number
+        "400":
+          description: "Bad request"
+      x-swagger-router-controller: Pharmacy
+components:
+  schemas:
+    ListPharmacy:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        address:
+          type: string
+        openingHours:
+          type: string
+        drugs:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              quantity:
+                type: integer
+              reserved:
+                type: integer
+              dayForRestock:
+                type: integer
+    drugRequest:
+      properties:
+        idPharmacy:
+          type: integer
+        idDrug:
+          type: integer
+        quantity:
+          type: integer

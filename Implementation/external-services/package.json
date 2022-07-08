@@ -4,12 +4,17 @@
   "description": "External services with rest API endpoints called from the digital-pharma-client ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "npm install",
+    "start": "node index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
   "dependencies": {
-    "express": "^4.18.1",
-    "http": "^0.0.1-security"
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "oas3-tools": "^2.2.3"
   }
 }
