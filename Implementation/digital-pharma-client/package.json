@@ -4,7 +4,8 @@
   "description": "This is a nodejs client that subscribes to the service tasks of the EXECUTABLE bpmn file in the project",
   "main": "client.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node client.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,5 +14,8 @@
     "install": "^0.13.0",
     "node-rest-client": "^3.1.1",
     "npm": "^8.13.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }

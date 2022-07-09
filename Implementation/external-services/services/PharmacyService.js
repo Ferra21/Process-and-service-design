@@ -1,8 +1,7 @@
-let getPharmacies = require ('../utils/db-pharmacies.js');
-let pharmacies = getPharmacies.getPharmacies();
+let pharmaciesDB = require('../utils/db-pharmacies.js');
+let pharmacies = pharmaciesDB.getPharmacies();
 /**
  * Get list of pharmacies from mock db
- *
  * returns pharmacies
  **/
 exports.getListOfPharmacies = function () {
@@ -13,27 +12,32 @@ exports.getListOfPharmacies = function () {
     });
 };
 
-exports.getAvailability = function (idPharmacy, idDrug, quantity) {
+exports.getAvailability = function (pharmacyID, drugCode, quantity) {
     return new Promise(function (resolve, reject) {
-        console.log(pharmacies)
-        let quantityAvailable = (pharmacies[idPharmacy].drugs[idDrug].quantity)
-        console.log(quantityAvailable)
-        if( quantityAvailable >= quantity)
-            resolve({ "res": true } )
+        let availableQuantity = pharmaciesDB.getDrugQuantity(pharmacyID, drugCode)
+        if (availableQuantity >= quantity)
+            resolve({ res: true })
         else
-            resolve({ "res": false });
+            resolve({ res: false });
     }).catch(e => {
         resolve(e);
     });
 }
 
-exports.reserveDrugs = function (idPharmacy, idDrug, quantity) {
+exports.reserveDrugs = function (pharmacyID, drugCode, quantity) {
     return new Promise(function (resolve, reject) {
-        let quantityAvailable = (pharmacies[idPharmacy].drugs[idDrug].quantity);
-        if( quantityAvailable >= quantity){
-            let cost = pharmacies[idPharmacy].drugs[idDrug].price * quantity;
-            pharmacies[idPharmacy].drugs[idDrug].quantity -= quantity;
-            resolve({ "res": "Drugs reserved correctly!", "price": cost });
+        let drugID = pharmaciesDB.getDrugID(pharmacyID, drugCode)
+        let availableQuantity = pharmaciesDB.getDrugQuantity(pharmacyID, drugCode)
+        if (availableQuantity >= quantity) {
+            let totPrice = pharmacies[pharmacyID].drugs[drugID].price * quantity;
+            pharmacies[pharmacyID].drugs[drugID].quantity = availableQuantity - quantity;
+            resolve({
+                "res": "Drugs reserved correctly!",
+                "drugName": pharmacies[pharmacyID].drugs[drugID].name,
+                //"pharmacyName" : pharmacies[pharmacyID].name,
+                //"pharmacyAddress" : pharmacies[pharmacyID].address,
+                "price": totPrice
+            });
         } else
             resolve({ "res": "Drugs not reserved.." });
     }).catch(e => {
@@ -41,28 +45,49 @@ exports.reserveDrugs = function (idPharmacy, idDrug, quantity) {
     });
 }
 
-exports.orderDrugs = function (idPharmacy, idDrug, quantity) {
+exports.orderDrugs = function (pharmacyID, drugCode, quantity) {
     return new Promise(function (resolve, reject) {
-        let quantityAvailable = (pharmacies[idPharmacy].drugs[idDrug].quantity);
-        if( quantityAvailable >= quantity){
-            let cost = pharmacies[idPharmacy].drugs[idDrug].price * quantity;
-            pharmacies[idPharmacy].drugs[idDrug].dayForRestock = Math.floor(Math.random() * 4 + 1 );
-            resolve({ "res": "Drugs reserved correctly!", "price": cost });
+        let drugID = pharmaciesDB.getDrugID(pharmacyID, drugCode)
+        let availableQuantity = pharmaciesDB.getDrugQuantity(pharmacyID, drugCode)
+        
+        console.log("-> Order medicine: " + drugCode + " Quantity: " + quantity + " Pharmacy: " + pharmacyID)
+        console.log("-> Available quantity: " + availableQuantity)
+
+        if (availableQuantity < quantity) {
+            let totPrice = pharmacies[pharmacyID].drugs[drugID].price * quantity;
+            // Generate a random number for the waiting days for restock
+            pharmacies[pharmacyID].drugs[drugID].dayForRestock = Math.floor(Math.random() * 4 + 1);
+            
+            resolve({ 
+                "res": "Drugs ordered correctly!",
+                "drugName": pharmacies[pharmacyID].drugs[drugID].name,
+                "price": totPrice
+            });
         } else
-            resolve({ "res": "Drugs not reserved.." });
+            resolve({ "res": "Drugs not ordered.." });
     }).catch(e => {
         resolve(e);
     });
 }
 
-exports.getTimeAvailability = function (idPharmacy, idDrug, available) {
+exports.getTimeAvailability = function (pharmacyID, drugCode, available) {
     return new Promise(function (resolve, reject) {
-        let openingHours = pharmacies[idPharmacy].openingHours;
-        if( available === false ){
-            let daysForRestock = pharmacies[idPharmacy].drugs[idDrug].dayForRestock;
-            resolve({ "openingHours": openingHours, "daysForRestock": daysForRestock });
+        let drugID = pharmaciesDB.getDrugID(pharmacyID, drugCode)
+        let openingHours = pharmacies[pharmacyID].openingHours;
+        if (available === false) {
+            let daysForRestock = pharmacies[pharmacyID].drugs[drugID].dayForRestock;
+            resolve({
+                "pharmacyName" : pharmacies[pharmacyID].name,
+                "pharmacyAddress" : pharmacies[pharmacyID].address,
+                "openingHours": openingHours,
+                "daysForRestock": daysForRestock
+            });
         } else
-            resolve({ "openingHours": openingHours });
+            resolve({
+                "pharmacyName" : pharmacies[pharmacyID].name,
+                "pharmacyAddress" : pharmacies[pharmacyID].address,
+                "openingHours": openingHours
+            });
     }).catch(e => {
         resolve(e);
     });

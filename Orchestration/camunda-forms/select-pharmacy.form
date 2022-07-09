@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 2,
+  "components": [
+    {
+      "text": "# Select a pharmacy",
+      "type": "text",
+      "id": "Field_1lspz0w"
+    },
+    {
+      "text": "${pharmacy_1} <br>\n\n${pharmacy_2} <br>\n\n${pharmacy_3} <br>\n\n${pharmacy_4} <br>\n\n${pharmacy_5} <br>",
+      "type": "text",
+      "id": "Field_0u7dyoc"
+    },
+    {
+      "values": [
+        {
+          "value": "1",
+          "label": "${pharmacy_1}"
+        },
+        {
+          "label": "${pharmacy_2}",
+          "value": "2"
+        },
+        {
+          "label": "${pharmacy_3}",
+          "value": "3"
+        },
+        {
+          "label": "${pharmacy_4}",
+          "value": "4"
+        },
+        {
+          "label": "${pharmacy_5}",
+          "value": "5"
+        }
+      ],
+      "label": "Radio",
+      "type": "radio",
+      "id": "Field_1vjshl3",
+      "key": "pharmacyChoice",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "action": "submit",
+      "label": "Button",
+      "type": "button",
+      "id": "Field_14rojyc",
+      "key": "field_0e4afc5"
+    }
+  ],
+  "type": "default",
+  "id": "select-pharmacy"
+}

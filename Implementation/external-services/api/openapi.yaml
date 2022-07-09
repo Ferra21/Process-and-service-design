@@ -14,7 +14,7 @@ tags:
   description: APIs of the Digital-pharma pharmacy third party for requesting and managing
     **pharmacy**
 paths:
-  /pharmacy/getListOfPharmacies:
+  /pharmacy/get-list-of-pharmacies:
     get:
       tags:
       - pharmacy
@@ -31,7 +31,7 @@ paths:
         "404":
           description: Pharmacies not found
       x-swagger-router-controller: Pharmacy
-  /pharmacy/getAvailability:
+  /pharmacy/get-availability:
     post:
       tags:
         - pharmacy
@@ -57,7 +57,7 @@ paths:
         "400":
           description: "Bad request"
       x-swagger-router-controller: Pharmacy
-  /pharmacy/reserveDrugs:
+  /pharmacy/reserve-drugs:
     post:
       tags:
         - pharmacy
@@ -80,12 +80,14 @@ paths:
                 properties:
                   res:
                     type: string
+                  drugName: 
+                    type: string
                   price:
                     type: number
         "400":
           description: "Bad request"
       x-swagger-router-controller: Pharmacy
-  /pharmacy/orderDrugs:
+  /pharmacy/order-drugs:
     post:
       tags:
         - pharmacy
@@ -108,12 +110,14 @@ paths:
                 properties:
                   res:
                     type: string
+                  drugName: 
+                    type: string
                   price:
                     type: number
         "400":
           description: "Bad request"
       x-swagger-router-controller: Pharmacy
-  /pharmacy/getTimeAvailability:
+  /pharmacy/get-time-availability:
     post:
       tags:
         - pharmacy
@@ -128,9 +132,9 @@ paths:
               properties:
                 pharmacyId:
                   type: integer
-                drugId:
-                  type: integer
-                available:
+                drugCode:
+                  type: string
+                availability:
                   type: boolean
         required: true
       responses:
@@ -140,6 +144,10 @@ paths:
             application/json:
               schema:
                 properties:
+                  pharmacyName:
+                    type: string
+                  pharmacyAddress:
+                    type: string
                   openingHours:
                     type: string
                   daysForRestock:
@@ -166,6 +174,8 @@ components:
             properties:
               id:
                 type: integer
+              code:
+                type: string
               name:
                 type: string
               quantity:
@@ -176,9 +186,9 @@ components:
                 type: integer
     drugRequest:
       properties:
-        idPharmacy:
+        pharmacyId:
           type: integer
-        idDrug:
-          type: integer
+        drugCode:
+          type: string
         quantity:
           type: integer
