@@ -35,7 +35,7 @@ client.subscribe("get-pharmacies", async function ({ task, taskService }) {
 
   // call rest API
   restclient.get(
-    "http://localhost:3000/pharmacy/get-list-of-pharmacies",
+    "http://localhost:3000/digitalpharma/get-list-of-pharmacies",
     args,
     function (data, response) {
       console.log("-> Response status code: " + response.statusCode);

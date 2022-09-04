@@ -21,16 +21,6 @@ module.exports.getAvailability = function getAvailability(req, res) {
 
 };
 
-module.exports.getListOfPharmacies = function getListOfPharmacies(req, res) {
-    pharmacy.getListOfPharmacies()
-        .then(function (response) {
-            utils.writeJson(res, response);
-        })
-        .catch(function (response) {
-            utils.writeJson(res, response);
-        });
-}
-
 module.exports.reserveDrugs = function reserveDrugs(req, res) {
     if (req.body && req.body.pharmacyId >= 0 && req.body.drugCode !== null && req.body.quantity >= 0)
         pharmacy.reserveDrugs(req.body.pharmacyId, req.body.drugCode, req.body.quantity)

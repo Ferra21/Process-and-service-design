@@ -13,11 +13,14 @@ tags:
 - name: pharmacy
   description: APIs of the Digital-pharma pharmacy third party for requesting and managing
     **pharmacy**
+- name: digitalPharma
+  description: APIs of Digital-pharma internal for requesting from the internal DB
+    **Digital-pharma**
 paths:
-  /pharmacy/get-list-of-pharmacies:
+  /digitalpharma/get-list-of-pharmacies:
     get:
       tags:
-      - pharmacy
+      - digitalPharma
       summary: Get list of pharmacies
       description: This API allows to get list of pharmacies
       operationId: getListOfPharmacies
@@ -30,7 +33,7 @@ paths:
                 $ref: '#/components/schemas/ListPharmacy'
         "404":
           description: Pharmacies not found
-      x-swagger-router-controller: Pharmacy
+      x-swagger-router-controller: DigitalPharma
   /pharmacy/get-availability:
     post:
       tags:
